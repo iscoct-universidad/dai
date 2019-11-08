@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<head>
+    <title>App Práctica 3</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}" type="text/css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<body>
+    <header class="header">
+        <section class="iconSection">
+            Icono
+        </section>
+        <section class="titleSection">
+            <h1 class="title">
+                Practice 3 App
+            </h1>
+            <h2 class="title">
+                Practicing with Flask
+            </h2>
+        </section>
+        <section class="signInSection">
+            {% if logged %}
+                <section>
+                    Welcome {{ username }}
+                </section>
+                <button id="displayDataButton" onclick="displayData()" class="btn btn-info btn-lg">
+                    Show data
+                </button>
+                <section>
+                    <form action="/app/logout" method="POST">
+                        <button type="submit" class="btn btn-info btn-lg">Log out</button>
+                    </form>
+                </section>
+            {% else %}
+                <section class="headerNav">
+                    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">
+                        Sign in
+                    </button>
+                </section>
+                <section class="headerNav">
+                    <button onclick="displayName()" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">
+                        Sign up
+                    </button>
+                </section>
+            {% endif %}
+        </section>
+    </header>
+    {% if menu %}
+        <aside class="asideMenu">
+            <ul class="asideMenuList">
+                {% for item in menu %}
+                    <li class="menuItem">{{ item }}</li>
+                {% endfor %}
+            </ul>
+        </aside>
+    {% endif %}
+    <main>
+        {% if error %}
+            <p>{{ error }}</p>
+            <p>Please try again</p>
+        {% elif logged %}
+            <section style="display: none;" id="data">
+                <p>Username: {{ username }}</p>
+                <p>Name: {{ name }}</p>
+            </section>
+        {% endif %}
+    </main>    
+    <footer class="footer">
+        <section class="footerSection">
+            Author: Francisco José Cotán López
+        </section>
+        <section class="footerSection">
+            Licencia: MIT
+        </section>
+    </footer>
+    
+
+  <!-- Modal -->
+  <div onmouseout="hideName()" class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Introduce your credentials</h4>
+        </div>
+        <div class="modal-body">
+            <form id="logForm" action="{{ url_for('sign_in') }}" method="POST">            
+                <div class="form-group">
+                    <label for="username">User name</label>
+                    <input id="username" type="text" class="form-control" name="user_name" placeholder="User name">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input id="password" type="password" class="form-control" name="password" placeholder="Password">
+                </div>
+                <div id="nameSection" class="form-group" style="display: none;">
+                    <label for="name">Name</label>
+                    <input id="name" type="text" class="form-control" name="name" placeholder="Name" />
+                </div>
+                <button type="submit" class="btn btn-primary">Send</button>
+            </form>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <script src="{{ url_for('static', filename='javascript.js') }}"></script>
+</body>
